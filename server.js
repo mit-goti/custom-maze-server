@@ -55,8 +55,7 @@ async function foo(req , res) {
         ans_algo = "dfs";
         ans_steps = dfs_count;
     }
-    var algo = 1;
-    var counter = 0;
+    counter = 0;
     var heap = new Heap(function(a,b) {
         return a.cost - b.cost;
     }); 
@@ -97,8 +96,7 @@ async function foo(req , res) {
         ans_steps = counter;
     }
 
-    var algo = 0;
-    var counter = 0;
+    counter = 0;
     var heap = new Heap(function(a,b) {
         return a.cost - b.cost;
     }); 
