@@ -17,6 +17,11 @@ async function foo(req , res) {
     var end = req.body.end;
     var ans_algo = "dfs";
     var ans_steps = 100000000;
+
+    //*****************DFS***********************//
+    //*****************DFS***********************//
+    //*****************DFS***********************//
+
     var counter = 0; 
     var stack = [];
     stack.push(start);
@@ -52,9 +57,13 @@ async function foo(req , res) {
     }
     var dfs_count = counter;
     if(dfs_count < ans_steps) {
-        ans_algo = "dfs";
+        ans_algo = "DFS";
         ans_steps = dfs_count;
     }
+
+    //*****************A_Euclid***********************//
+    //*****************A_Euclid***********************//
+    //*****************A_Euclid***********************//
     counter = 0;
     var heap = new Heap(function(a,b) {
         return a.cost - b.cost;
@@ -92,10 +101,13 @@ async function foo(req , res) {
     }
     var eu = counter;
     if(counter < ans_steps) {
-        ans_algo = "A_Euclid";
+        ans_algo = "A*-Euclid";
         ans_steps = counter;
     }
 
+    //*****************A_Manhatten***********************//
+    //*****************A_Manhatten***********************//
+    //*****************A_Manhatten***********************//
     counter = 0;
     var heap = new Heap(function(a,b) {
         return a.cost - b.cost;
@@ -130,15 +142,54 @@ async function foo(req , res) {
             heap.push({cost: Math.abs(x-end.x) + Math.abs(y-1-end.y) ,x:x , y:y-1});
         }
     }
-
     var man = counter;
     if(counter < ans_steps) {
-        ans_algo = "A_Manhatten";
+        ans_algo = "A*-Manhatten";
         ans_steps = counter;
     }
-    return {dfs: dfs_count , euclid: eu , manhatten: man ,ans: ans_algo , count: ans_steps};
+
+    //*****************Dijikstra***********************//
+    //*****************Dijikstra***********************//
+    //*****************Dijikstra***********************//
+
+    counter = 0;
+    stack = [];
+    stack.push(start);
+    for(var i = 0 ; i < 100 ; i++) {
+        for(var j = 0 ; j < 100 ; j++) 
+            visited[i+"_"+j] = 0;
+    }
+    while(true) {
+        var temp_array = [];
+        while(stack.length != 0) {
+            counter++;
+            var temp = stack.pop();
+            var x = temp.x , y = temp.y;
+            visited[x + "_" + y] = 1;
+            if(x == end.x && y == end.y)
+                break;
+            if(matrix[x+1][y] == 0 && visited[(x+1)+"_"+y] === 0) 
+                temp_array.push({x:x+1 , y:y});
+            if(matrix[x-1][y] == 0 && visited[(x-1)+"_"+y] === 0) 
+                temp_array.push({x:x-1 , y:y});
+            if(matrix[x][y+1] == 0 && visited[(x)+"_"+(y+1)] === 0) 
+                temp_array.push({x:x , y:y+1});
+            if(matrix[x][y-1] == 0 && visited[(x)+"_"+(y-1)] === 0) 
+                temp_array.push({x:x , y:y-1});
+        }
+        stack = temp_array;
+        if(visited[end.x + "_" + end.y] == 1)
+            break;
+    }
+    var Dijikstra = counter;
+    if(counter < ans_steps) {
+        ans_algo = "Dijikstra";
+        ans_steps = counter;
+    }
+
+
+
+    return {dfs: dfs_count , euclid: eu , Dijikstra: Dijikstra , manhatten: man ,ans: ans_algo , count: ans_steps};
 }
-
-
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
